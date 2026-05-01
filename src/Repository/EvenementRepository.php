@@ -40,4 +40,16 @@ class EvenementRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findProchains(int $limit = 6): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.dateDebut >= :now')
+            ->andWhere('e.statut = :statut')
+            ->setParameter('now', new \DateTime())
+            ->setParameter('statut', 'publie')
+            ->orderBy('e.dateDebut', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }
