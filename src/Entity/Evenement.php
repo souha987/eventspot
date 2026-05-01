@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\EvenementRepository;
 use Doctrine\DBAL\Types\Types;
@@ -15,35 +17,46 @@ class Evenement
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min:5)]
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min:30)]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Assert\NotNull]
     #[ORM\Column]
-    private ?\DateTime $dateDebut = null;
+    private ?\DateTimeInterface $dateDebut = null;
 
+    #[Assert\NotNull]
     #[ORM\Column]
-    private ?\DateTime $dateFin = null;
+    private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\ManyToOne(inversedBy: 'evenements')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $lieu = null;
 
+    #[Assert\Range(min:1)]
     #[ORM\Column]
     private ?int $capaciteMax = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column(nullable: true)]
     private ?float $prix = null;
 
+    #[Assert\Choice(['conference','atelier','meetup','formation','concert'])]
     #[ORM\Column(length: 30)]
     private ?string $categorie = null;
 
+    #[Assert\Choice(['brouillon','publie','complet','annule'])]
     #[ORM\Column(length: 20)]
     private ?string $statut = null;
 
     #[ORM\Column]
-    private ?\DateTime $dateCreation = null;
+    private ?\DateTimeImmutable $dateCreation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageName = null;
@@ -137,7 +150,7 @@ class Evenement
         return $this->prix;
     }
 
-    public function setPrix(float $prix): static
+    public function setPrix(?float $prix): static
     {
         $this->prix = $prix;
 
@@ -173,12 +186,12 @@ class Evenement
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTime $dateCreation): static
-    {
-        $this->dateCreation = $dateCreation;
+public function setDateCreation(\DateTimeImmutable $dateCreation): static
+{
+    $this->dateCreation = $dateCreation;
 
-        return $this;
-    }
+    return $this;
+}
 
     public function getImageName(): ?string
     {
@@ -221,5 +234,11 @@ class Evenement
     {
         $this->tags->removeElement($tag);
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+        $this->dateCreation = new \DateTimeImmutable();    
     }
 }
