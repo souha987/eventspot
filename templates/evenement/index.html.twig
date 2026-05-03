@@ -1,15 +1,20 @@
 {% extends 'base.html.twig' %}
-{% block title %}Accueil — EventSpot{% endblock %}
+
+{% block title %}Hello EvenementController!{% endblock %}
+
 {% block body %}
-<div class="text-center mb-5">
-    <h1 class="display-5 fw-bold">🎉 Prochains événements</h1>
-    <p class="text-muted">Découvrez les 6 prochains événements publiés</p>
-</div>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for e in evenements %}
-        {% include 'evenement/_card.html.twig' with {evenement: e} %}
-    {% else %}
-        <p class="text-center text-muted">Aucun événement à venir.</p>
-    {% endfor %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code>C:/projets/eventspot/src/Controller/EvenementController.php</code></li>
+        <li>Your template at <code>C:/projets/eventspot/templates/evenement/index.html.twig</code></li>
+    </ul>
 </div>
 {% endblock %}

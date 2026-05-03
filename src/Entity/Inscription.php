@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\InscriptionRepository;
 use Doctrine\DBAL\Types\Types;
