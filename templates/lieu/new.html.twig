@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouveau lieu{% endblock %}
+{% block body %}
+<div class="row justify-content-center">
+<div class="col-md-6">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-geo-alt"></i> Nouveau lieu</h4>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_row(form.nom) }}
+            {{ form_row(form.adresse) }}
+            {{ form_row(form.ville) }}
+            {{ form_row(form.capacite) }}
+            <button type="submit" class="btn btn-primary w-100">Créer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}Récemment consultés{% endblock %}
+{% block body %}
+<h2><i class="bi bi-clock-history"></i> Récemment consultés</h2>
+<div class="row g-4 mt-2">
+{% for e in evenements %}
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5>{{ e.titre }}</h5>
+                <p class="text-muted small">
+                    <i class="bi bi-calendar3"></i> {{ e.dateDebut ? e.dateDebut|date('d/m/Y') : '-' }}
+                </p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('app_evenement_show', {id: e.id}) }}" class="btn btn-sm btn-outline-primary w-100">
+                    Voir
+                </a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <p class="text-muted">Aucun événement consulté récemment.</p>
+{% endfor %}
+</div>
+{% endblock %}

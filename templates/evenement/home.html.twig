@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block title %}Accueil — EventSpot{% endblock %}
+{% block body %}
+
+<div class="p-5 mb-4 rounded-3 text-white" style="background: linear-gradient(135deg,#6f42c1,#0d6efd)">
+    <h1 class="display-5 fw-bold"><i class="bi bi-calendar-event"></i> EventSpot</h1>
+    <p class="fs-5">Découvrez et rejoignez les prochains événements près de chez vous.</p>
+    <a href="{{ path('app_evenement_index') }}" class="btn btn-light btn-lg">Voir tous les événements</a>
+</div>
+
+<h2 class="mb-4">🗓️ Prochains événements</h2>
+
+<div class="row g-4">
+{% for e in evenements %}
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            {% if e.imageName %}
+                <img src="{{ asset('uploads/evenements/' ~ e.imageName) }}"
+                     class="card-img-top" style="height:180px;object-fit:cover;">
+            {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:180px;font-size:3rem;">
+                    {% if e.categorie == 'concert' %}🎵
+                    {% elseif e.categorie == 'conference' %}🎤
+                    {% elseif e.categorie == 'atelier' %}🔧
+                    {% elseif e.categorie == 'meetup' %}👥
+                    {% else %}📚{% endif %}
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ e.titre }}</h5>
+                <p class="card-text text-muted small">
+                    <i class="bi bi-calendar3"></i> {{ e.dateDebut ? e.dateDebut|date('d/m/Y') : '-' }}<br>
+                    <i class="bi bi-geo-alt"></i> {{ e.lieu ? e.lieu.ville : '-' }}
+                </p>
+                {% for tag in e.tags %}
+                    <span class="badge" style="background-color:{{ tag.couleur }}">{{ tag.nom }}</span>
+                {% endfor %}
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{{ path('app_evenement_show', {id: e.id}) }}" class="btn btn-primary btn-sm w-100">
+                    Voir détails
+                </a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="col"><p class="text-muted">Aucun événement à venir.</p></div>
+{% endfor %}
+</div>
+{% endblock %}

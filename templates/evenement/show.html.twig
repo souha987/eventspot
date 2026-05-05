@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ evenement.titre }}{% endblock %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-8">
+        {% if evenement.imageName %}
+            <img src="{{ asset('uploads/evenements/' ~ evenement.imageName) }}"
+                 class="img-fluid rounded mb-4 w-100" style="max-height:350px;object-fit:cover;">
+        {% endif %}
+
+        <h1>{{ evenement.titre }}</h1>
+
+        <p class="text-muted">
+            <i class="bi bi-calendar3"></i>
+            {{ evenement.dateDebut ? evenement.dateDebut|date('d/m/Y H:i') : '-' }}
+            → {{ evenement.dateFin ? evenement.dateFin|date('d/m/Y H:i') : '-' }}
+        </p>
+
+        <p><i class="bi bi-clock"></i> Créé : {{ evenement.dateDebut|time_ago }}</p>
+        <p>{{ capacity_badge(evenement.inscriptions|length, evenement.capaciteMax) }}</p>
+
+        <p class="lead">{{ evenement.description }}</p>
+
+        <div class="mb-3">
+            {% for tag in evenement.tags %}
+                <span class="badge" style="background-color:{{ tag.couleur }}">{{ tag.nom }}</span>
+            {% endfor %}
+        </div>
+
+        {# Boutons modifier / supprimer — organisateur ou admin uniquement #}
+        <div class="d-flex gap-2 mt-3">
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('EVENEMENT_EDIT', evenement) %}
+                <a href="{{ path('app_evenement_edit', {id: evenement.id}) }}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil"></i> Modifier
+                </a>
+            {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('EVENEMENT_DELETE', evenement) %}
+                <form method="post" action="{{ path('app_evenement_delete', {id: evenement.id}) }}"
+                      onsubmit="return confirm('Supprimer cet événement ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ evenement.id) }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i> Supprimer
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Informations</h5>
+
+                <p><i class="bi bi-geo-alt"></i> <strong>Lieu :</strong>
+                    {{ evenement.lieu ? evenement.lieu.nom ~ ', ' ~ evenement.lieu.ville : '-' }}
+                </p>
+
+                <p><i class="bi bi-people"></i> <strong>Places :</strong>
+                    {{ evenement.inscriptions|length }} / {{ evenement.capaciteMax }}
+                </p>
+
+                {% set pct = evenement.capaciteMax > 0
+                    ? (evenement.inscriptions|length / evenement.capaciteMax * 100)|round
+                    : 0 %}
+                <div class="progress mb-3">
+                    <div class="progress-bar
+                        {% if pct >= 100 %}bg-danger
+                        {% elseif pct >= 80 %}bg-warning
+                        {% else %}bg-success{% endif %}"
+                         style="width: {{ pct }}%">{{ pct }}%</div>
+                </div>
+
+                <p><i class="bi bi-tag"></i> <strong>Prix :</strong>
+                    {{ evenement.prix|price_format }}
+                </p>
+
+                <p><i class="bi bi-info-circle"></i> <strong>Statut :</strong>
+                    {% if evenement.statut == 'publie' %}
+                        <span class="badge bg-success">✅ Publié</span>
+                    {% elseif evenement.statut == 'complet' %}
+                        <span class="badge bg-danger">🔴 Complet</span>
+                    {% elseif evenement.statut == 'annule' %}
+                        <span class="badge bg-dark">⚠ Annulé</span>
+                    {% else %}
+                        <span class="badge bg-secondary">📝 Brouillon</span>
+                    {% endif %}
+                </p>
+
+                {# Bouton inscription selon statut et état de l'utilisateur #}
+                {% if evenement.statut == 'annule' %}
+                    <button class="btn btn-dark w-100" disabled>
+                        <i class="bi bi-x-circle"></i> Événement annulé
+                    </button>
+                {% elseif evenement.statut == 'complet' %}
+                    <button class="btn btn-secondary w-100" disabled>
+                        <i class="bi bi-slash-circle"></i> Complet
+                    </button>
+                {% elseif not is_granted('ROLE_USER') %}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-box-arrow-in-right"></i> Connectez-vous pour vous inscrire
+                    </a>
+                {% elseif dejaInscrit %}
+                    <button class="btn btn-success w-100" disabled>
+                        <i class="bi bi-check-circle"></i> Déjà inscrit
+                    </button>
+                {% else %}
+                    <a href="{{ path('app_evenement_inscription', {id: evenement.id}) }}"
+                       class="btn btn-primary w-100">
+                        <i class="bi bi-person-plus"></i> S'inscrire
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="{{ path('app_evenement_index') }}" class="btn btn-outline-secondary mt-3">
+    <i class="bi bi-arrow-left"></i> Retour
+</a>
+
+{% endblock %}

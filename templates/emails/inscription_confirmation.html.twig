@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Bonjour {{ user.pseudo }} !</h2>
+    <p>Votre inscription à <strong>{{ evenement.titre }}</strong> est confirmée.</p>
+    <p><strong>Date :</strong> {{ evenement.dateDebut|date('d/m/Y H:i') }}</p>
+    <p><strong>Lieu :</strong> {{ evenement.lieu ? evenement.lieu.nom ~ ', ' ~ evenement.lieu.ville : '-' }}</p>
+    <p><strong>Prix :</strong> {{ evenement.prix|price_format }}</p>
+    <hr>
+    <p style="color:#888">EventSpot — votre plateforme d'événements</p>
+</body>
+</html>

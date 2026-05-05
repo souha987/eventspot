@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block title %}Modifier — {{ evenement.titre }}{% endblock %}
+{% block body %}
+<div class="row justify-content-center">
+<div class="col-md-8">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning">
+            <h4 class="mb-0"><i class="bi bi-pencil"></i> Modifier : {{ evenement.titre }}</h4>
+        </div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_row(form.titre) }}
+            {{ form_row(form.description) }}
+            <div class="row">
+                <div class="col">{{ form_row(form.dateDebut) }}</div>
+                <div class="col">{{ form_row(form.dateFin) }}</div>
+            </div>
+            {{ form_row(form.lieu) }}
+            <div class="row">
+                <div class="col">{{ form_row(form.categorie) }}</div>
+                <div class="col">{{ form_row(form.statut) }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form_row(form.capaciteMax) }}</div>
+                <div class="col">{{ form_row(form.prix) }}</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tags</label>
+                {{ form_widget(form.tags) }}
+            </div>
+            {{ form_row(form.imageFile) }}
+            <button type="submit" class="btn btn-warning w-100">
+                <i class="bi bi-check-circle"></i> Enregistrer
+            </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% if pageCount > 1 %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if current > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, query|merge({'page': current - 1})) }}">&laquo;</a>
+            </li>
+        {% endif %}
+
+        {% for page in pagesInRange %}
+            <li class="page-item {{ page == current ? 'active' }}">
+                <a class="page-link" href="{{ path(route, query|merge({'page': page})) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+
+        {% if current < pageCount %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, query|merge({'page': current + 1})) }}">&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

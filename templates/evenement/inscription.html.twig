@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block title %}S'inscrire — {{ evenement.titre }}{% endblock %}
+{% block body %}
+<div class="row justify-content-center">
+<div class="col-md-6">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-person-plus"></i> Inscription : {{ evenement.titre }}</h4>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_row(form.commentaire) }}
+            <button type="submit" class="btn btn-primary w-100">Confirmer l'inscription</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

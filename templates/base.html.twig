@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    {{ importmap('app') }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}EventSpot{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
     <style>
-        :root { --bs-primary: #6f42c1; }
         body { background: #f8f9fa; }
         .navbar { background: linear-gradient(135deg, #6f42c1, #0d6efd) !important; }
-        .badge-categorie { font-size: .75rem; }
         .card { transition: transform .2s; }
         .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
     </style>
 </head>
 <body>
-
 <nav class="navbar navbar-dark navbar-expand-lg mb-4 shadow">
   <div class="container">
     <a class="navbar-brand fw-bold fs-4" href="{{ path('app_home') }}">
@@ -27,35 +26,60 @@
     </button>
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="{{ path('app_evenement_liste') }}">Événements</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ path('app_lieu_liste') }}">Lieux</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ path('app_tag_liste') }}">Tags</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path('app_evenement_index') }}">Événements</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path('app_lieu_index') }}">Lieux</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path('app_tag_index') }}">Tags</a></li>
       </ul>
-      <a href="{{ path('app_evenement_nouveau') }}" class="btn btn-light btn-sm">
-        <i class="bi bi-plus-circle"></i> Nouvel événement
-      </a>
+      <ul class="navbar-nav ms-auto align-items-center">
+        {% if app.user %}
+            <li class="nav-item">
+                <span class="nav-link text-white">
+                    <i class="bi bi-person-circle"></i> {{ app.user.pseudo }}
+                </span>
+            </li>
+            {% if is_granted('ROLE_USER') %}
+            <li class="nav-item">
+                <a class="btn btn-light btn-sm ms-2" href="{{ path('app_evenement_new') }}">
+                    <i class="bi bi-plus-circle"></i> Nouvel événement
+                </a>
+            </li>
+            {% endif %}
+            <li class="nav-item ms-2">
+                <a class="nav-link" href="{{ path('app_logout') }}">
+                    <i class="bi bi-box-arrow-right"></i> Déconnexion
+                </a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_login') }}">
+                    <i class="bi bi-box-arrow-in-right"></i> Connexion
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-light btn-sm ms-2" href="{{ path('app_register') }}">
+                    <i class="bi bi-person-plus"></i> S'inscrire
+                </a>
+            </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
 </nav>
-
 <div class="container pb-5">
-    {# Flash messages #}
     {% for type, messages in app.flashes %}
         {% for message in messages %}
-            <div class="alert alert-{{ type == 'danger' ? 'danger' : (type == 'success' ? 'success' : 'info') }} alert-dismissible fade show">
+            <div class="alert alert-{{ type == 'success' ? 'success' : (type == 'danger' ? 'danger' : 'info') }} alert-dismissible fade show">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         {% endfor %}
     {% endfor %}
-
     {% block body %}{% endblock %}
 </div>
-
 <footer class="bg-dark text-white text-center py-3 mt-5">
-    <small>© {{ "now"|date("Y") }} EventSpot — Tous droits réservés</small>
+    <small>&copy; {{ "now"|date("Y") }} EventSpot — Tous droits réservés</small>
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block javascripts %}{% endblock %}
 </body>
 </html>
