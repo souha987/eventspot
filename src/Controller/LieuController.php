@@ -15,6 +15,8 @@ final class LieuController extends AbstractController
     #[Route('/lieux', name: 'app_lieu_index')]
     public function index(LieuRepository $repo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ORGANISATEUR');
+
         return $this->render('lieu/index.html.twig', [
             'lieux' => $repo->findAll(),
         ]);
@@ -23,6 +25,8 @@ final class LieuController extends AbstractController
     #[Route('/lieux/nouveau', name: 'app_lieu_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $lieu = new Lieu();
         $form = $this->createForm(LieuType::class, $lieu);
         $form->handleRequest($request);
@@ -30,7 +34,6 @@ final class LieuController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($lieu);
             $em->flush();
-
             $this->addFlash('success', 'Lieu créé avec succès.');
             return $this->redirectToRoute('app_lieu_index');
         }

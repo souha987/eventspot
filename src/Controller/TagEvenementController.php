@@ -15,6 +15,8 @@ final class TagEvenementController extends AbstractController
     #[Route('/tags', name: 'app_tag_index')]
     public function index(TagEvenementRepository $repo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return $this->render('tag_evenement/index.html.twig', [
             'tags' => $repo->findAll(),
         ]);
@@ -23,6 +25,8 @@ final class TagEvenementController extends AbstractController
     #[Route('/tags/nouveau', name: 'app_tag_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $tag = new TagEvenement();
         $form = $this->createForm(TagEvenementType::class, $tag);
         $form->handleRequest($request);
@@ -30,7 +34,6 @@ final class TagEvenementController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($tag);
             $em->flush();
-
             $this->addFlash('success', 'Tag créé avec succès.');
             return $this->redirectToRoute('app_tag_index');
         }
@@ -43,6 +46,8 @@ final class TagEvenementController extends AbstractController
     #[Route('/tags/{id}/supprimer', name: 'app_tag_delete', methods: ['POST'])]
     public function delete(Request $request, TagEvenement $tag, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         if ($this->isCsrfTokenValid('delete'.$tag->getId(), $request->request->get('_token'))) {
             $em->remove($tag);
             $em->flush();

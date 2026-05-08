@@ -26,9 +26,26 @@
     </button>
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="{{ path('app_evenement_index') }}">Événements</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ path('app_lieu_index') }}">Lieux</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ path('app_tag_index') }}">Tags</a></li>
+
+        {# ✅ Tout le monde #}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_evenement_index') }}">Événements</a>
+        </li>
+
+        {# 🔒 Organisateur + Admin seulement #}
+        {% if is_granted('ROLE_ORGANISATEUR') %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_lieu_index') }}">Lieux</a>
+        </li>
+        {% endif %}
+
+        {# 🔒 Admin seulement #}
+        {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_tag_index') }}">Tags</a>
+        </li>
+        {% endif %}
+
       </ul>
       <ul class="navbar-nav ms-auto align-items-center">
         {% if app.user %}
@@ -37,13 +54,16 @@
                     <i class="bi bi-person-circle"></i> {{ app.user.pseudo }}
                 </span>
             </li>
-            {% if is_granted('ROLE_USER') %}
+
+            {# 🔒 Bouton "Nouvel événement" : Organisateur + Admin seulement #}
+            {% if is_granted('ROLE_ORGANISATEUR') %}
             <li class="nav-item">
                 <a class="btn btn-light btn-sm ms-2" href="{{ path('app_evenement_new') }}">
                     <i class="bi bi-plus-circle"></i> Nouvel événement
                 </a>
             </li>
             {% endif %}
+
             <li class="nav-item ms-2">
                 <a class="nav-link" href="{{ path('app_logout') }}">
                     <i class="bi bi-box-arrow-right"></i> Déconnexion
