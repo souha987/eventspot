@@ -1,20 +1,38 @@
 {% extends 'base.html.twig' %}
-{% block title %}Nouveau tag{% endblock %}
+
+{% block title %}Nouveau Tag — EventSpot{% endblock %}
+
 {% block body %}
-<div class="row justify-content-center">
-<div class="col-md-5">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0"><i class="bi bi-tag"></i> Nouveau tag</h4>
-        </div>
-        <div class="card-body">
-            {{ form_start(form) }}
-            {{ form_row(form.nom) }}
-            {{ form_row(form.couleur) }}
-            <button type="submit" class="btn btn-primary w-100">Créer</button>
-            {{ form_end(form) }}
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold text-uppercase" style="letter-spacing: 2px;">Nouveau Tag</h1>
+                    <div class="mx-auto mt-3" style="width: 40px; height: 2px; background: #000;"></div>
+                </div>
+
+                <div class="card border-dark rounded-0 p-4 shadow-sm">
+                    {{ form_start(form) }}
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Nom du tag</label>
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control border-dark rounded-0', 'placeholder': 'Ex: Tech'}}) }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Couleur (Hex)</label>
+                            {{ form_widget(form.couleur, {'attr': {'class': 'form-control border-dark rounded-0 form-control-color w-100', 'type': 'color'}}) }}
+                            <small class="text-muted">Choisissez une couleur pour identifier ce tag.</small>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark w-100 py-3">Créer</button>
+                            <a href="{{ path('app_tag_index') }}" class="btn btn-outline-dark w-50 py-3">Annuler</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 {% endblock %}

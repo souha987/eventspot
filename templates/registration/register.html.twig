@@ -1,27 +1,53 @@
 {% extends 'base.html.twig' %}
-{% block title %}Inscription{% endblock %}
+
+{% block title %}Inscription — EventSpot{% endblock %}
+
 {% block body %}
-<div class="row justify-content-center">
-<div class="col-md-6">
-    <div class="card shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h4 class="mb-0"><i class="bi bi-person-plus"></i> Créer un compte</h4>
-        </div>
-        <div class="card-body">
-            {{ form_start(form) }}
-            {{ form_row(form.email) }}
-            {{ form_row(form.pseudo) }}
-            {{ form_row(form.plainPassword) }}
-            <button class="btn btn-success w-100" type="submit">
-                <i class="bi bi-check-circle"></i> S'inscrire
-            </button>
-            {{ form_end(form) }}
-            <hr>
-            <p class="text-center mb-0">
-                Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
-            </p>
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold display-5">Inscription</h1>
+                    <p class="text-muted">Rejoignez la plus grande communauté tech.</p>
+                </div>
+
+                <div class="card border-0 shadow-lg rounded-5 p-4 p-md-5 bg-white">
+                    {{ form_start(form) }}
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Email</label>
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control border-0 bg-light rounded-4 py-3'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Pseudo</label>
+                            {{ form_widget(form.pseudo, {'attr': {'class': 'form-control border-0 bg-light rounded-4 py-3'}}) }}
+                            {{ form_errors(form.pseudo) }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Mot de passe</label>
+                            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control border-0 bg-light rounded-4 py-3'}}) }}
+                            {{ form_errors(form.plainPassword) }}
+                        </div>
+
+                        <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow mb-4" type="submit">
+                            Créer mon compte
+                        </button>
+                    {{ form_end(form) }}
+
+                    <div class="text-center">
+                        <p class="text-muted small mb-0">
+                            Déjà inscrit ? 
+                            <a href="{{ path('app_login') }}" class="text-primary fw-bold text-decoration-none">Se connecter</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 {% endblock %}
+
+

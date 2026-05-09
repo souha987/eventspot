@@ -1,40 +1,88 @@
 {% extends 'base.html.twig' %}
-{% block title %}Nouvel événement{% endblock %}
+
+{% block title %}Nouveau — EventSpot{% endblock %}
+
 {% block body %}
-<div class="row justify-content-center">
-<div class="col-md-8">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Nouvel événement</h4>
-        </div>
-        <div class="card-body">
-            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-            {{ form_row(form.titre) }}
-            {{ form_row(form.description) }}
-            <div class="row">
-                <div class="col">{{ form_row(form.dateDebut) }}</div>
-                <div class="col">{{ form_row(form.dateFin) }}</div>
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold text-uppercase" style="letter-spacing: 2px;">Nouvel événement</h1>
+                    <div class="mx-auto mt-3" style="width: 40px; height: 2px; background: #000;"></div>
+                </div>
+
+                <div class="card border-dark rounded-0 p-4 shadow-sm">
+                    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Titre de l'événement</label>
+                            {{ form_widget(form.titre, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Description</label>
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control border-dark rounded-0', 'rows': '5'}}) }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Date de début</label>
+                                {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Date de fin</label>
+                                {{ form_widget(form.dateFin, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Lieu</label>
+                            {{ form_widget(form.lieu, {'attr': {'class': 'form-select border-dark rounded-0'}}) }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Catégorie</label>
+                                {{ form_widget(form.categorie, {'attr': {'class': 'form-select border-dark rounded-0'}}) }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Statut</label>
+                                {{ form_widget(form.statut, {'attr': {'class': 'form-select border-dark rounded-0'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Capacité Max</label>
+                                {{ form_widget(form.capaciteMax, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Prix</label>
+                                {{ form_widget(form.prix, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Tags</label>
+                            <div class="border border-dark p-3">
+                                {{ form_widget(form.tags) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label small fw-bold text-uppercase">Image de couverture</label>
+                            {{ form_widget(form.imageFile, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            <small class="text-muted">Formats acceptés : JPEG, PNG, WebP</small>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark w-100 py-3">Créer l'événement</button>
+                            <a href="{{ path('app_evenement_index') }}" class="btn btn-outline-dark w-50 py-3">Annuler</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
             </div>
-            {{ form_row(form.lieu) }}
-            <div class="row">
-                <div class="col">{{ form_row(form.categorie) }}</div>
-                <div class="col">{{ form_row(form.statut) }}</div>
-            </div>
-            <div class="row">
-                <div class="col">{{ form_row(form.capaciteMax) }}</div>
-                <div class="col">{{ form_row(form.prix) }}</div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">Tags</label>
-                {{ form_widget(form.tags) }}
-            </div>
-            {{ form_row(form.imageFile) }}
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="bi bi-check-circle"></i> Créer
-            </button>
-            {{ form_end(form) }}
         </div>
     </div>
-</div>
-</div>
+</section>
 {% endblock %}

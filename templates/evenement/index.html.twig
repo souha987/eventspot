@@ -1,158 +1,118 @@
 {% extends 'base.html.twig' %}
-{% block title %}Liste des événements{% endblock %}
+
+{% block title %}Tous les événements — EventSpot{% endblock %}
+
 {% block body %}
-
-{% macro categorie_badge(cat) %}
-    {% set map = {
-        'conference': {'icon': '🎤', 'color': 'primary', 'label': 'Conférence'},
-        'atelier':    {'icon': '🔧', 'color': 'warning',  'label': 'Atelier'},
-        'meetup':     {'icon': '🤝', 'color': 'info',     'label': 'Meetup'},
-        'formation':  {'icon': '📚', 'color': 'success',  'label': 'Formation'},
-        'concert':    {'icon': '🎵', 'color': 'danger',   'label': 'Concert'},
-    } %}
-    {% if map[cat] is defined %}
-        <span class="badge bg-{{ map[cat].color }}">{{ map[cat].icon }} {{ map[cat].label }}</span>
-    {% endif %}
-{% endmacro %}
-
-{% macro statut_badge(statut) %}
-    {% set map = {
-        'brouillon': {'icon': '📝', 'color': 'secondary', 'label': 'Brouillon'},
-        'publie':    {'icon': '✅', 'color': 'success',   'label': 'Publié'},
-        'complet':   {'icon': '🔴', 'color': 'danger',    'label': 'Complet'},
-        'annule':    {'icon': '⚠', 'color': 'dark',      'label': 'Annulé'},
-    } %}
-    {% if map[statut] is defined %}
-        <span class="badge bg-{{ map[statut].color }}">{{ map[statut].icon }} {{ map[statut].label }}</span>
-    {% endif %}
-{% endmacro %}
-
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="bi bi-calendar3"></i> Événements</h1>
-    {% if is_granted('ROLE_ORGANISATEUR') or is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_evenement_new') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Nouvel événement
-        </a>
-    {% endif %}
-</div>
-
-{# Formulaire de filtres #}
-<div class="card shadow-sm mb-4">
-    <div class="card-body">
-        <form method="get" action="{{ path('app_evenement_index') }}" class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Recherche</label>
-                <input type="text" name="q" class="form-control" placeholder="Titre, description…"
-                       value="{{ filtres.q ?? '' }}">
+<section class="pt-4 pb-5">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+            <div>
+                <h1 class="fw-bold display-4 gradient-text">Événements</h1>
+                <p class="text-muted">Explorez tous les événements tech de la plateforme.</p>
             </div>
-            <div class="col-md-2">
-                <label class="form-label fw-semibold">Catégorie</label>
-                <select name="categorie" class="form-select">
-                    <option value="">Toutes</option>
-                    {% for val, label in {
-                        'conference': 'Conférence',
-                        'atelier':    'Atelier',
-                        'meetup':     'Meetup',
-                        'formation':  'Formation',
-                        'concert':    'Concert'
-                    } %}
-                        <option value="{{ val }}" {{ filtres.categorie == val ? 'selected' }}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label fw-semibold">Ville</label>
-                <input type="text" name="ville" class="form-control" placeholder="Paris…"
-                       value="{{ filtres.ville ?? '' }}">
-            </div>
-            <div class="col-md-2">
-                <label class="form-label fw-semibold">Tag</label>
-                <input type="text" name="tag" class="form-control" placeholder="Tech, Gratuit…"
-                       value="{{ filtres.tag ?? '' }}">
-            </div>
-            <div class="col-md-3 d-flex gap-2">
-                <button class="btn btn-primary w-100" type="submit">
-                    <i class="bi bi-search"></i> Filtrer
-                </button>
-                <a href="{{ path('app_evenement_index') }}" class="btn btn-outline-secondary w-100">
-                    <i class="bi bi-x-circle"></i> Reset
+            {% if is_granted('ROLE_ORGANISATEUR') or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_evenement_new') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-plus-lg me-2"></i>Nouveau
                 </a>
+            {% endif %}
+        </div>
+
+        <!-- Filtres Colorés -->
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-5 bg-white">
+            <div class="card-body">
+                <form method="get" action="{{ path('app_evenement_index') }}" class="row g-3 align-items-end">
+                    <div class="col-lg-4">
+                        <label class="form-label small fw-bold text-muted">Recherche</label>
+                        <div class="input-group bg-light rounded-3 border-0 overflow-hidden">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" name="q" class="form-control bg-transparent border-0 py-2" placeholder="Titre, mots-clés..." value="{{ filtres.q ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label small fw-bold text-muted">Catégorie</label>
+                        <select name="categorie" class="form-select bg-light border-0 py-2 rounded-3">
+                            <option value="">Toutes les catégories</option>
+                            {% for val, label in {
+                                'conference': 'Conférence',
+                                'hackathon':  'Hackathon',
+                                'meetup':     'Meetup',
+                                'atelier':    'Atelier',
+                                'formation':  'Formation'
+                            } %}
+                                <option value="{{ val }}" {{ filtres.categorie == val ? 'selected' }}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label small fw-bold text-muted">Ville</label>
+                        <div class="input-group bg-light rounded-3 border-0 overflow-hidden">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-geo-alt text-muted"></i></span>
+                            <input type="text" name="ville" class="form-control bg-transparent border-0 py-2" placeholder="Toutes les villes" value="{{ filtres.ville ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary w-100 py-2 rounded-3 fw-bold" type="submit">Filtrer</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+
+        <div class="row g-4">
+            {% for e in pagination %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 overflow-hidden">
+                        {% if e.imageName %}
+                            <div class="position-relative" style="height: 180px;">
+                                <img src="{{ asset('uploads/evenements/' ~ e.imageName) }}" class="w-100 h-100" style="object-fit:cover;" alt="{{ e.titre }}">
+                            </div>
+                        {% endif %}
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                {% for tag in e.tags %}
+                                    <span class="badge-cat" style="background-color: {{ tag.couleur }};">{{ tag.nom }}</span>
+                                {% else %}
+                                    <span class="badge-cat bg-secondary">{{ e.categorie }}</span>
+                                {% endfor %}
+                            </div>
+                            <h5 class="fw-bold mb-3">{{ e.titre }}</h5>
+                            <div class="text-muted small mb-4">
+                                <p class="mb-1"><i class="bi bi-geo-alt-fill text-primary me-2"></i>{{ e.lieu ? e.lieu.ville : 'En ligne' }}</p>
+                                <p class="mb-0"><i class="bi bi-clock-fill text-primary me-2"></i>{{ e.dateDebut ? e.dateDebut|date('H:i') : '-' }}</p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{{ path('app_evenement_show', {id: e.id}) }}" class="btn btn-dark flex-grow-1 py-2 rounded-3 fw-bold">Détails</a>
+                                {% if is_granted('EVENEMENT_EDIT', e) %}
+                                    <a href="{{ path('app_evenement_edit', {id: e.id}) }}" class="btn btn-light rounded-3 px-3" title="Modifier"><i class="bi bi-pencil"></i></a>
+                                {% endif %}
+                                {% if is_granted('EVENEMENT_DELETE', e) %}
+                                    <form method="post" action="{{ path('app_evenement_delete', {id: e.id}) }}" onsubmit="return confirm('Supprimer cet événement ?')" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ e.id) }}">
+                                        <button type="submit" class="btn btn-outline-danger rounded-3 px-3" title="Supprimer"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center py-5">
+                    <div class="bg-white rounded-5 p-5 shadow-sm">
+                        <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+                        <h3 class="fw-bold">Aucun résultat</h3>
+                        <p class="text-muted">Essayez d'ajuster vos critères de recherche.</p>
+                        <a href="{{ path('app_evenement_index') }}" class="btn btn-primary mt-3 rounded-pill px-4">Réinitialiser</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-5">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     </div>
-</div>
-
-<div class="table-responsive">
-<table class="table table-hover align-middle bg-white shadow-sm rounded">
-    <thead class="table-dark">
-        <tr>
-            <th>Image</th>
-            <th>Titre</th>
-            <th>Catégorie</th>
-            <th>Statut</th>
-            <th>Date début</th>
-            <th>Lieu</th>
-            <th>Tags</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for e in pagination %}
-        <tr>
-            <td>
-                {% if e.imageName %}
-                    <img src="{{ asset('uploads/evenements/' ~ e.imageName) }}"
-                         style="width:60px;height:45px;object-fit:cover;" class="rounded">
-                {% else %}
-                    <span class="fs-3">
-                        {% if e.categorie == 'concert' %}🎵
-                        {% elseif e.categorie == 'conference' %}🎤
-                        {% elseif e.categorie == 'atelier' %}🔧
-                        {% elseif e.categorie == 'meetup' %}🤝
-                        {% else %}📚{% endif %}
-                    </span>
-                {% endif %}
-            </td>
-            <td><strong>{{ e.titre }}</strong></td>
-            <td>{{ _self.categorie_badge(e.categorie) }}</td>
-            <td>{{ _self.statut_badge(e.statut) }}</td>
-            <td>{{ e.dateDebut ? e.dateDebut|date('d/m/Y H:i') : '-' }}</td>
-            <td>{{ e.lieu ? e.lieu.nom : '-' }}</td>
-            <td>
-                {% for tag in e.tags %}
-                    <span class="badge" style="background-color: {{ tag.couleur }}">{{ tag.nom }}</span>
-                {% endfor %}
-            </td>
-            <td>
-                <a href="{{ path('app_evenement_show', {id: e.id}) }}" class="btn btn-sm btn-outline-primary" title="Voir">
-                    <i class="bi bi-eye"></i>
-                </a>
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('EVENEMENT_EDIT', e) %}
-                    <a href="{{ path('app_evenement_edit', {id: e.id}) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                {% endif %}
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('EVENEMENT_DELETE', e) %}
-                    <form method="post" action="{{ path('app_evenement_delete', {id: e.id}) }}"
-                          class="d-inline" onsubmit="return confirm('Supprimer {{ e.titre }} ?')">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ e.id) }}">
-                        <button class="btn btn-sm btn-outline-danger" title="Supprimer">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </form>
-                {% endif %}
-            </td>
-        </tr>
-    {% else %}
-        <tr><td colspan="8" class="text-center text-muted py-4">Aucun événement.</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-
-{# Pagination #}
-<div class="d-flex justify-content-center mt-4">
-    {{ knp_pagination_render(pagination) }}
-</div>
-
+</section>
 {% endblock %}
+
+
+

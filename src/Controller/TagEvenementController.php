@@ -43,6 +43,7 @@ final class TagEvenementController extends AbstractController
         ]);
     }
 
+
     #[Route('/tags/{id}/supprimer', name: 'app_tag_delete', methods: ['POST'])]
     public function delete(Request $request, TagEvenement $tag, EntityManagerInterface $em): Response
     {

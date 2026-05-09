@@ -1,22 +1,48 @@
 {% extends 'base.html.twig' %}
-{% block title %}Nouveau lieu{% endblock %}
+
+{% block title %}Nouveau Lieu — EventSpot{% endblock %}
+
 {% block body %}
-<div class="row justify-content-center">
-<div class="col-md-6">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0"><i class="bi bi-geo-alt"></i> Nouveau lieu</h4>
-        </div>
-        <div class="card-body">
-            {{ form_start(form) }}
-            {{ form_row(form.nom) }}
-            {{ form_row(form.adresse) }}
-            {{ form_row(form.ville) }}
-            {{ form_row(form.capacite) }}
-            <button type="submit" class="btn btn-primary w-100">Créer</button>
-            {{ form_end(form) }}
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold text-uppercase" style="letter-spacing: 2px;">Nouveau Lieu</h1>
+                    <div class="mx-auto mt-3" style="width: 40px; height: 2px; background: #000;"></div>
+                </div>
+
+                <div class="card border-dark rounded-0 p-4 shadow-sm">
+                    {{ form_start(form) }}
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Nom du lieu</label>
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Adresse</label>
+                            {{ form_widget(form.adresse, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Ville</label>
+                                {{ form_widget(form.ville, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label class="form-label small fw-bold text-uppercase">Capacité</label>
+                                {{ form_widget(form.capacite, {'attr': {'class': 'form-control border-dark rounded-0'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark w-100 py-3">Enregistrer</button>
+                            <a href="{{ path('app_lieu_index') }}" class="btn btn-outline-dark w-50 py-3">Annuler</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 {% endblock %}

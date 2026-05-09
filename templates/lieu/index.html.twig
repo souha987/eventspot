@@ -1,31 +1,48 @@
 {% extends 'base.html.twig' %}
-{% block title %}Lieux{% endblock %}
+
+{% block title %}Lieux — EventSpot{% endblock %}
+
 {% block body %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="bi bi-geo-alt"></i> Lieux</h1>
-    {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('app_lieu_new') }}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Nouveau lieu
-    </a>
-    {% endif %}
-</div>
-<div class="table-responsive">
-<table class="table table-hover bg-white shadow-sm rounded">
-    <thead class="table-dark">
-        <tr><th>Nom</th><th>Adresse</th><th>Ville</th><th>Capacité</th></tr>
-    </thead>
-    <tbody>
-    {% for lieu in lieux %}
-        <tr>
-            <td><strong>{{ lieu.nom }}</strong></td>
-            <td>{{ lieu.adresse }}</td>
-            <td>{{ lieu.ville }}</td>
-            <td>{{ lieu.capacite }}</td>
-        </tr>
-    {% else %}
-        <tr><td colspan="4" class="text-center text-muted py-4">Aucun lieu.</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-4">
+            <div>
+                <h1 class="fw-bold text-uppercase" style="letter-spacing: 2px;">Lieux</h1>
+                <p class="text-muted mb-0">Gestion des emplacements pour vos événements.</p>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_lieu_new') }}" class="btn btn-dark">
+                    Nouveau Lieu
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle border">
+                <thead class="table-light text-uppercase small fw-bold">
+                    <tr>
+                        <th class="py-3 px-4">Nom</th>
+                        <th class="py-3 px-4">Adresse</th>
+                        <th class="py-3 px-4">Ville</th>
+                        <th class="py-3 px-4">Capacité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for lieu in lieux %}
+                    <tr>
+                        <td class="py-3 px-4 fw-bold">{{ lieu.nom }}</td>
+                        <td class="py-3 px-4 text-muted">{{ lieu.adresse }}</td>
+                        <td class="py-3 px-4 text-muted">{{ lieu.ville }}</td>
+                        <td class="py-3 px-4 fw-bold">{{ lieu.capacite }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted text-uppercase small">Aucun lieu répertorié.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 {% endblock %}

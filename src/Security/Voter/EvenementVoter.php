@@ -23,7 +23,7 @@ class EvenementVoter extends Voter
         if (!$user instanceof User) return false;
 
         // Admin peut tout faire
-        if (in_array('ROLE_ADMIN', $user->getRoles())) return true;
+        if (in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_ADMIN', $token->getRoleNames())) return true;
 
         // Seul l'organisateur peut modifier/supprimer son événement
         return $subject->getOrganisateur() === $user;
